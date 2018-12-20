@@ -5,7 +5,7 @@ cache:
   directories:
     - "node_modules"
 install:
- - npm install
+  - npm install
 script:
   - "npm run build"
   # sonar not on pull requests for the moment
