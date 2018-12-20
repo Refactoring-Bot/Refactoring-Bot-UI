@@ -5,9 +5,14 @@ cache:
     directories:
         - "node_modules"
 install:
-    - npm install
+    - npm install --progress=false
 script:
+    # production build
     - npm run build
+    # execute tests
+    - npm run test
+    # insert current version from package.json into sonar-project.properties
     - PACKAGE_VERSION=$(node -p "require('./package.json').version")
-    - echo sonar.projectVersion=$PACKAGE_VERSION >> sonar-project.properties
-    - npm run sonar -- -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN
+    - echo sonar.projectVersion=${PACKAGE_VERSION} >> sonar-project.properties
+    # run sonar scanner
+    - npm run sonar -- -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_TOKEN}
