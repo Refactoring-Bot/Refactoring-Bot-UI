@@ -1,11 +1,13 @@
 language: node_js
 node_js:
-- "node"
+    - "node"
 cache:
-  directories:
-    - "node_modules"
+    directories:
+        - "node_modules"
 install:
-  - npm install
+    - npm install
 script:
-  - "npm run build"
-  - npm run sonar -D"sonar.host.url=https://sonarcloud.io"
+    - npm run build
+    - PACKAGE_VERSION=$(node -p "require('./package.json').version")
+    - echo sonar.projectVersion=$PACKAGE_VERSION >> sonar-project.properties
+    - npm run sonar -- -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN
