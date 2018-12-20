@@ -9,4 +9,4 @@ install:
 script:
   - "npm run build"
   # sonar not on pull requests for the moment
-  - "npm run sonar"
+  - "npm run sonar -Dsonar.host.url=https://sonarcloud.io"
