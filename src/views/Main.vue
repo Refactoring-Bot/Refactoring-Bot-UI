@@ -2,8 +2,12 @@
   <div>
     <h1>Overview</h1>
     <p>This UI can be used for the management and configuration of a RefactoringBot instance.</p>
-    <p>Current API usage: {{apiEndpoint}}</p>
-    <p>Status: {{status}}</p>
+    <p>API endpoint in use: {{apiEndpoint}}</p>
+    <p>
+      Status: {{status}}
+      <fa-icon class="available" v-if="status==='OK'" icon="check-circle"></fa-icon>
+      <fa-icon class="unavailable" v-if="status==='Unavailable'" icon="exclamation-triangle"></fa-icon>
+    </p>
   </div>
 </template>
 
@@ -32,4 +36,11 @@ export default class extends Vue {
 </script>
 
 <style lang="less" scoped>
+.available {
+  color: green;
+}
+
+.unavailable {
+  color: red;
+}
 </style>

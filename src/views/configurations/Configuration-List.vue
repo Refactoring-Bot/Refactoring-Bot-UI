@@ -1,9 +1,12 @@
 <template>
   <div>
     <h1>Configurations</h1>
-    <ul>
-      <li v-for="config in configurations" v-bind:key="config.configurationId">{{config.repoName}}</li>
-    </ul>
+    <div class="card bg-light mb-3" v-for="config in configurations" v-bind:key="config.configurationId">
+      <div class="card-header">Repository: {{config.repoName}}</div>
+      <div class="card-body">
+        <pre class="card-text">{{JSON.stringify(config, null, 4)}}</pre>
+      </div>
+    </div>
   </div>
 </template>
 
