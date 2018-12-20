@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+- "node"
+cache:
+  directories:
+    - "node_modules"
+script:
+  - "npm run build"
+  # sonar not on pull requests for the moment
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then "npm run sonar"; fi'
