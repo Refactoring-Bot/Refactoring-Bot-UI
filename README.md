@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Refactoring-Bot/Refactoring-Bot-UI.svg?branch=master)](https://travis-ci.org/Refactoring-Bot/Refactoring-Bot-UI)
+[![Code smells](https://sonarcloud.io/api/project_badges/measure?project=Refactoring-Bot_Refactoring-Bot-UI&metric=code_smells)](https://sonarcloud.io/project/issues?id=Refactoring-Bot_Refactoring-Bot-UI&resolved=false&types=CODE_SMELL)
+
 # RefactoringBot Management UI
 
 > A web frontend to conveniently configure and manage the RefactoringBot
