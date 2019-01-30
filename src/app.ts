@@ -2,11 +2,8 @@
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "bootstrap/dist/css/bootstrap.css";
 
-// Configuration file
-import { config } from "./config";
-
-// Bootswatch theme (changeable in the config)
-import(`bootswatch/dist/${config.bootswatchTheme}/bootstrap.min.css`);
+// Bootswatch theme (https://bootswatch.com)
+import "bootswatch/dist/flatly/bootstrap.min.css";
 
 // IE polyfills
 import "core-js/es6/array";
@@ -21,10 +18,19 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 // Only import the icons you really use to reduce the size of the import, e.g. 'faCheckCircle' instead of 'fas' (all free solid icons)
 import {
   faCheckCircle,
-  faExclamationTriangle
+  faEdit,
+  faExclamationTriangle,
+  faPlusCircle,
+  faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-library.add(faCheckCircle, faExclamationTriangle);
+library.add(
+  faCheckCircle,
+  faEdit,
+  faExclamationTriangle,
+  faPlusCircle,
+  faTrashAlt
+);
 Vue.component("fa-icon", FontAwesomeIcon);
 
 // BootstrapVue UI components library

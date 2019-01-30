@@ -12,6 +12,7 @@
 
         <b-collapse is-nav id="nav_collapse">
           <b-navbar-nav>
+            <b-nav-item to="/git-users">Git Users</b-nav-item>
             <b-nav-item to="/configurations">Configurations</b-nav-item>
           </b-navbar-nav>
 
@@ -25,7 +26,7 @@
         <router-view></router-view>
       </section>
     </div>
-    <footer class="footer bg-primary">
+    <footer class="footer bg-primary text-light">
       <div class="container-fluid">
         <p>Last updated: {{footer.buildDate}}</p>
         <p>Version: {{footer.version}}</p>

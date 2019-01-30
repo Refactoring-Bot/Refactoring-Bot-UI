@@ -1,21 +1,27 @@
+import ConfigDetailView from "./views/configurations/Configuration-Detail.vue";
 import ConfigListView from "./views/configurations/Configuration-List.vue";
-import IssueListView from "./views/issues/Issue-List.vue";
+import GitUserListView from "./views/git-users/GitUser-List.vue";
 import MainView from "./views/Main.vue";
 
 export default [
   {
-    name: "Home",
     path: "/",
     component: MainView
   },
   {
-    name: "Configurations",
+    path: "/git-users",
+    component: GitUserListView
+  },
+  {
     path: "/configurations",
     component: ConfigListView
   },
   {
-    name: "Issues",
-    path: "/issues",
-    component: IssueListView
+    path: "/configurations/:id",
+    component: ConfigDetailView
+  },
+  {
+    path: "/add-configuration",
+    component: ConfigDetailView
   }
 ];

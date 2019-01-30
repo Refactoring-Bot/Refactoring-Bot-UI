@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Configurations</h1>
+    <h1>Git Users</h1>
 
     <b-form inline>
       <b-input-group prepend="# of entries:">
@@ -13,7 +13,7 @@
         </b-input-group-append>
       </b-input-group>
       <b-button variant="success" to="/add-configuration">
-        <fa-icon icon="plus-circle"></fa-icon>Add Configuration
+        <fa-icon icon="plus-circle"></fa-icon>Add Git User
       </b-button>
       <b-button variant="primary" v-on:click="removeAll()" v-bind:disabled="configurationList.length===0">
         <fa-icon icon="trash-alt"></fa-icon>Delete all
@@ -21,8 +21,8 @@
     </b-form>
 
     <b-table show-empty striped hover :sort-by.sync="table.sortBy" :sort-desc.sync="table.sortDesc" :items="configurationList" :fields="table.fields" :filter="table.filter">
-      <template slot="repoName" slot-scope="row">
-        <router-link v-bind:to="`/configurations/${row.item.configurationId}`">{{row.item.repoName}}</router-link>
+      <template slot="name" slot-scope="row">
+        <router-link v-bind:to="`/git-users/${row.item.id}`">{{row.item.name}}</router-link>
       </template>
       <template slot="actions" slot-scope="row">
         <div class="float-right">
@@ -43,7 +43,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import RestClient from "./ConfigurationRestClient";
+import RestClient from "./GitUserRestClient";
 
 @Component({})
 export default class extends Vue {
@@ -53,22 +53,16 @@ export default class extends Vue {
     sortDesc: false,
     filter: "",
     fields: [
-      { key: "repoOwner", sortable: true, label: "Repository Owner" },
-      { key: "repoName", sortable: true, label: "Repository Name" },
-      { key: "repoService", sortable: true, label: "Repository Service" },
-      { key: "analysisService", sortable: true },
-      {
-        key: "analysisServiceProjectKey",
-        sortable: true,
-        lable: "Analysis Project Key"
-      },
+      { key: "name", sortable: true },
+      { key: "email", sortable: true },
+      { key: "token", sortable: true },
       { key: "actions", label: "" }
     ]
   };
 
   public async mounted() {
     // Fetch configurations from API
-    this.configurationList = await RestClient.getConfigurations();
+    this.configurationList = await RestClient.getGitUsers();
     console.log(this.configurationList);
   }
 
