@@ -8,6 +8,7 @@ export default interface IConfiguration {
   repoFolder?: string;
   srcFolder?: string;
   gitUserId: number;
+  gitUserName?: string;
   forkApiLink?: string;
   forkGitLink?: string;
   analysisService: string;

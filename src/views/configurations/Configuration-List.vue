@@ -46,15 +46,18 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import ConfigRestClient from "./ConfigurationRestClient";
 import IConfiguration from "./Configuration.interface";
+import IGitUser from "../git-users/GitUser.interface";
+import GitUserRestClient from "../git-users/GitUserRestClient";
 
 @Component({})
 export default class extends Vue {
   private configurationList: IConfiguration[] = [];
   private table = {
-    sortBy: "repoOwner",
+    sortBy: "gitUserName",
     sortDesc: false,
     filter: "",
     fields: [
+      { key: "gitUserName", sortable: true, label: "Git User" },
       { key: "repoOwner", sortable: true, label: "Repository Owner" },
       { key: "repoName", sortable: true, label: "Repository Name" },
       { key: "repoService", sortable: true, label: "Repository Service" },
@@ -69,14 +72,28 @@ export default class extends Vue {
   };
 
   public async mounted() {
-    // Fetch configurations from API
-    this.configurationList = await ConfigRestClient.getConfigurations();
+    this.init();
+  }
+
+  public async init() {
+    // Fetch items from API
+    Promise.all([
+      ConfigRestClient.getConfigurations(),
+      GitUserRestClient.getGitUsers()
+    ]).then(res => {
+      res[0].forEach(conf => {
+        conf.gitUserName = res[1].find(
+          user => user.gitUserId === conf.gitUserId
+        ).name;
+      });
+      this.configurationList = res[0];
+    });
   }
 
   // Delete a single item
   private remove(id: number) {
     ConfigRestClient.deleteConfiguration(id).then(async () => {
-      this.configurationList = await ConfigRestClient.getConfigurations();
+      this.init();
     });
   }
 }
