@@ -79,10 +79,4 @@ export default class extends Vue {
 </script>
 
 <style lang="less" scoped>
-.form-inline {
-  margin: 15px 0;
-  > * {
-    margin: 0 2px;
-  }
-}
 </style>

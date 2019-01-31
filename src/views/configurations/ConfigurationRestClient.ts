@@ -1,10 +1,11 @@
 // A RestClient to interact with Configuration API resources
 import axios from "axios";
-import { config } from "../../config";
+import config from "../../config";
+import IConfiguration from "./Configuration.interface";
 
 export default abstract class ConfigurationRestClient {
   // Get all configurations
-  public static async getConfigurations(): Promise<any[]> {
+  public static async getConfigurations(): Promise<IConfiguration[]> {
     return [
       {
         configurationId: 10,
@@ -13,11 +14,9 @@ export default abstract class ConfigurationRestClient {
         repoApiLink: "https://api.github.com/repos/MarvinWyrich/Bot-Playground",
         repoGitLink: "https://github.com/MarvinWyrich/Bot-Playground.git",
         repoService: "github",
-        repoFolder: "C:\\Users\\Marvin\\Documents\\BotForks\\10",
-        srcFolder: "C:\\Users\\Marvin\\Documents\\BotForks\\10\\src",
-        botName: "Samantha-Bo",
-        botEmail: "johnpatrick.elishah@plutofox.com",
-        botToken: "59a299108225cdd3592567799bdcd5192e1dcdad",
+        repoFolder: "C:\\BotForks\\10",
+        srcFolder: "C:\\BotForks\\10\\src",
+        gitUserId: 42,
         forkApiLink: "https://api.github.com/repos/Samantha-Bo/Bot-Playground",
         forkGitLink: "https://github.com/Samantha-Bo/Bot-Playground.git",
         analysisService: "sonarqube",
@@ -26,6 +25,29 @@ export default abstract class ConfigurationRestClient {
       }
     ];
     // return (await axios.get(`${this.api}/configurations`)).data;
+  }
+
+  // Get configuration by ID
+  public static async getConfigurationById(
+    id: string
+  ): Promise<IConfiguration> {
+    return {
+      configurationId: 10,
+      repoName: "Bot-Playground",
+      repoOwner: "MarvinWyrich",
+      repoApiLink: "https://api.github.com/repos/MarvinWyrich/Bot-Playground",
+      repoGitLink: "https://github.com/MarvinWyrich/Bot-Playground.git",
+      repoService: "github",
+      repoFolder: "C:\\BotForks\\10",
+      srcFolder: "C:\\BotForks\\10\\src",
+      gitUserId: 42,
+      forkApiLink: "https://api.github.com/repos/Samantha-Bo/Bot-Playground",
+      forkGitLink: "https://github.com/Samantha-Bo/Bot-Playground.git",
+      analysisService: "sonarqube",
+      analysisServiceProjectKey: "Bot-Playground:Bot-Playground",
+      maxAmountRequests: 5
+    };
+    // return (await axios.get(`${this.api}/configurations/${id}`)).data;
   }
 
   private static api = config.apiEndpoint;

@@ -1,5 +1,5 @@
 // config for this frontend project
-export const config = {
+export default {
   // identifier used for localStorage
   appId: "refactoring-bot-ui",
   appTitle: "Refactoring-Bot UI",

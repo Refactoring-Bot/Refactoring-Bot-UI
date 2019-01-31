@@ -24,6 +24,9 @@
       <template slot="repoName" slot-scope="row">
         <router-link v-bind:to="`/configurations/${row.item.configurationId}`">{{row.item.repoName}}</router-link>
       </template>
+      <template slot="repoService" slot-scope="row">
+        <a target="_blank" v-bind:href="row.item.repoGitLink">{{row.item.repoService}}</a>
+      </template>
       <template slot="actions" slot-scope="row">
         <div class="float-right">
           <!-- Edit -->
@@ -44,10 +47,11 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import RestClient from "./ConfigurationRestClient";
+import IConfiguration from "./Configuration.interface";
 
 @Component({})
 export default class extends Vue {
-  private configurationList = [];
+  private configurationList: IConfiguration[] = [];
   private table = {
     sortBy: "configurationId",
     sortDesc: false,
@@ -85,10 +89,4 @@ export default class extends Vue {
 </script>
 
 <style lang="less" scoped>
-.form-inline {
-  margin: 15px 0;
-  > * {
-    margin: 0 2px;
-  }
-}
 </style>

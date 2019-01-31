@@ -14,7 +14,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { config } from "../config";
+import config from "../config";
 import axios from "axios";
 
 @Component({})

@@ -38,7 +38,7 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import { config } from "./config";
+import config from "./config";
 
 @Component({})
 export default class extends Vue {
@@ -98,6 +98,13 @@ body,
   .content {
     overflow: auto;
     padding: 90px 20px 135px;
+  }
+}
+
+.form-inline {
+  margin: 15px 0;
+  > * {
+    margin: 0 2px;
   }
 }
 </style>
