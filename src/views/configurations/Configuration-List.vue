@@ -7,7 +7,7 @@
         <b-form-input v-model="configurationList.length" style="width:80px" disabled></b-form-input>
       </b-input-group>
       <b-input-group prepend="Filter:">
-        <b-form-input v-model="table.filter" v-on:input="$emit('update:filter', table.filter)"></b-form-input>
+        <b-form-input v-model="table.filter"></b-form-input>
         <b-input-group-append>
           <b-button variant="primary" :disabled="!table.filter" v-on:click="table.filter = ''">Clear</b-button>
         </b-input-group-append>
@@ -34,7 +34,7 @@
             <fa-icon icon="edit"></fa-icon>
           </b-button>
           <!-- Delete -->
-          <b-button variant="primary" size="sm" class="mr-1" v-on:click="remove(row.item.id)">
+          <b-button variant="primary" size="sm" class="mr-1" v-on:click="remove(row.item.configurationId)">
             <fa-icon icon="trash-alt"></fa-icon>
           </b-button>
         </div>
@@ -46,14 +46,14 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import RestClient from "./ConfigurationRestClient";
+import ConfigRestClient from "./ConfigurationRestClient";
 import IConfiguration from "./Configuration.interface";
 
 @Component({})
 export default class extends Vue {
   private configurationList: IConfiguration[] = [];
   private table = {
-    sortBy: "configurationId",
+    sortBy: "repoOwner",
     sortDesc: false,
     filter: "",
     fields: [
@@ -72,13 +72,14 @@ export default class extends Vue {
 
   public async mounted() {
     // Fetch configurations from API
-    this.configurationList = await RestClient.getConfigurations();
-    console.log(this.configurationList);
+    this.configurationList = await ConfigRestClient.getConfigurations();
   }
 
   // Delete a single item
-  private remove(id: string) {
-    alert("No yet implemented...");
+  private remove(id: number) {
+    ConfigRestClient.deleteConfiguration(id).then(async () => {
+      this.configurationList = await ConfigRestClient.getConfigurations();
+    });
   }
 
   // Delete all items

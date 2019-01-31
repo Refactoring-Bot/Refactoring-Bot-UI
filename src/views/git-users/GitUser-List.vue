@@ -4,34 +4,34 @@
 
     <b-form inline>
       <b-input-group prepend="# of entries:">
-        <b-form-input v-model="configurationList.length" style="width:80px" disabled></b-form-input>
+        <b-form-input v-model="gitUserList.length" style="width:80px" disabled></b-form-input>
       </b-input-group>
       <b-input-group prepend="Filter:">
-        <b-form-input v-model="table.filter" v-on:input="$emit('update:filter', table.filter)"></b-form-input>
+        <b-form-input v-model="table.filter"></b-form-input>
         <b-input-group-append>
           <b-button variant="primary" :disabled="!table.filter" v-on:click="table.filter = ''">Clear</b-button>
         </b-input-group-append>
       </b-input-group>
-      <b-button variant="success" to="/add-configuration">
+      <b-button variant="success" to="/add-git-user">
         <fa-icon icon="plus-circle"></fa-icon>Add Git User
       </b-button>
-      <b-button variant="primary" v-on:click="removeAll()" v-bind:disabled="configurationList.length===0">
+      <b-button variant="primary" v-on:click="removeAll()" v-bind:disabled="gitUserList.length===0">
         <fa-icon icon="trash-alt"></fa-icon>Delete all
       </b-button>
     </b-form>
 
-    <b-table show-empty striped hover :sort-by.sync="table.sortBy" :sort-desc.sync="table.sortDesc" :items="configurationList" :fields="table.fields" :filter="table.filter">
+    <b-table show-empty striped hover :sort-by.sync="table.sortBy" :sort-desc.sync="table.sortDesc" :items="gitUserList" :fields="table.fields" :filter="table.filter">
       <template slot="name" slot-scope="row">
-        <router-link v-bind:to="`/git-users/${row.item.id}`">{{row.item.name}}</router-link>
+        <router-link v-bind:to="`/git-users/${row.item.gitUserId}`">{{row.item.name}}</router-link>
       </template>
       <template slot="actions" slot-scope="row">
         <div class="float-right">
           <!-- Edit -->
-          <b-button variant="primary" size="sm" class="mr-1" v-bind:to="`/configurations/${row.item.configurationId}`">
+          <b-button variant="primary" size="sm" class="mr-1" v-bind:to="`/git-users/${row.item.gitUserId}`">
             <fa-icon icon="edit"></fa-icon>
           </b-button>
           <!-- Delete -->
-          <b-button variant="primary" size="sm" class="mr-1" v-on:click="remove(row.item.id)">
+          <b-button variant="primary" size="sm" class="mr-1" v-on:click="remove(row.item.gitUserId)">
             <fa-icon icon="trash-alt"></fa-icon>
           </b-button>
         </div>
@@ -43,13 +43,14 @@
 <script lang="ts">
 import Vue from "vue";
 import Component from "vue-class-component";
-import RestClient from "./GitUserRestClient";
+import GitUserRestClient from "./GitUserRestClient";
+import IGitUser from "./GitUser.interface";
 
 @Component({})
 export default class extends Vue {
-  private configurationList = [];
+  private gitUserList: IGitUser[] = [];
   private table = {
-    sortBy: "configurationId",
+    sortBy: "name",
     sortDesc: false,
     filter: "",
     fields: [
@@ -61,14 +62,15 @@ export default class extends Vue {
   };
 
   public async mounted() {
-    // Fetch configurations from API
-    this.configurationList = await RestClient.getGitUsers();
-    console.log(this.configurationList);
+    // Fetch git users from API
+    this.gitUserList = await GitUserRestClient.getGitUsers();
   }
 
   // Delete a single item
-  private remove(id: string) {
-    alert("No yet implemented...");
+  private remove(id: number) {
+    GitUserRestClient.deleteGitUser(id).then(async () => {
+      this.gitUserList = await GitUserRestClient.getGitUsers();
+    });
   }
 
   // Delete all items

@@ -5,7 +5,7 @@
       <b-row>
         <b-col>
           <b-form-group label="Git User">
-            <b-form-select v-model="configuration.gitUserId" :options="gitUserList" value-field="id" text-field="name" required></b-form-select>
+            <b-form-select v-model="configuration.gitUserId" :options="gitUserList" value-field="gitUserId" text-field="name" required></b-form-select>
           </b-form-group>
         </b-col>
         <b-col>
@@ -107,15 +107,30 @@ export default class extends Vue {
   }
 
   public async remove(): Promise<void> {
-    alert("Not yet implemented...");
+    ConfigRestClient.deleteConfiguration(
+      this.configuration.configurationId
+    ).then(() => {
+      this.$router.push("/configurations");
+    });
   }
 
   public async save(): Promise<void> {
-    if (this.editMode) {
-      // Update existing item
-    } else {
-      // Create new item
-    }
+    // Update existing item or create new item?
+    const promise = this.editMode
+      ? ConfigRestClient.updateConfiguration(this.configuration)
+      : ConfigRestClient.createConfiguration(this.configuration);
+
+    promise
+      .then(() => {
+        alert("Configuration successfully saved!");
+        if (this.editMode) {
+          this.$router.push("/configurations");
+        }
+      })
+      .catch(res => {
+        console.log(res);
+        alert(`Errors while saving configuration: ${res.data}`);
+      });
   }
 }
 </script>

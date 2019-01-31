@@ -1,5 +1,5 @@
 export default interface IGitUser {
-  id?: number;
+  gitUserId?: number;
   email: string;
   name: string;
   token: string;
