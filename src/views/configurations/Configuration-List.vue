@@ -13,10 +13,8 @@
         </b-input-group-append>
       </b-input-group>
       <b-button variant="success" to="/add-configuration">
-        <fa-icon icon="plus-circle"></fa-icon>Add Configuration
-      </b-button>
-      <b-button variant="primary" v-on:click="removeAll()" v-bind:disabled="configurationList.length===0">
-        <fa-icon icon="trash-alt"></fa-icon>Delete all
+        <fa-icon icon="plus-circle"></fa-icon>
+        <span>Add Configuration</span>
       </b-button>
     </b-form>
 
@@ -80,11 +78,6 @@ export default class extends Vue {
     ConfigRestClient.deleteConfiguration(id).then(async () => {
       this.configurationList = await ConfigRestClient.getConfigurations();
     });
-  }
-
-  // Delete all items
-  private removeAll() {
-    alert("No yet implemented...");
   }
 }
 </script>

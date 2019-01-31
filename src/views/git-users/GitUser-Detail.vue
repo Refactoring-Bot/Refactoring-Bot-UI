@@ -25,7 +25,7 @@
       </b-row>
       <b-form inline>
         <b-button variant="success" v-on:click="save()">
-          <fa-icon icon="plus-circle"></fa-icon>
+          <fa-icon icon="save"></fa-icon>
           <span>Save</span>
         </b-button>
         <b-button variant="primary" v-on:click="remove()" v-if="editMode">

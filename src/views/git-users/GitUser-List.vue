@@ -13,10 +13,8 @@
         </b-input-group-append>
       </b-input-group>
       <b-button variant="success" to="/add-git-user">
-        <fa-icon icon="plus-circle"></fa-icon>Add Git User
-      </b-button>
-      <b-button variant="primary" v-on:click="removeAll()" v-bind:disabled="gitUserList.length===0">
-        <fa-icon icon="trash-alt"></fa-icon>Delete all
+        <fa-icon icon="plus-circle"></fa-icon>
+        <span>Add Git User</span>
       </b-button>
     </b-form>
 
@@ -71,11 +69,6 @@ export default class extends Vue {
     GitUserRestClient.deleteGitUser(id).then(async () => {
       this.gitUserList = await GitUserRestClient.getGitUsers();
     });
-  }
-
-  // Delete all items
-  private removeAll() {
-    alert("No yet implemented...");
   }
 }
 </script>

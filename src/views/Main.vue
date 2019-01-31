@@ -8,6 +8,14 @@
       <fa-icon class="available" v-if="status==='OK'" icon="check-circle"></fa-icon>
       <fa-icon class="unavailable" v-if="status==='Unavailable'" icon="exclamation-triangle"></fa-icon>
     </p>
+    <div>
+      <b-card title="Usage Instructions">
+        <p class="card-text">
+            First, create a <router-link to="/add-git-user">git user</router-link> that will be used by the bot.<br>
+            After that, create a <router-link to="/add-configuration">refactoring configuration</router-link> for a repository with the created user.
+        </p>
+      </b-card>
+    </div>
   </div>
 </template>
 

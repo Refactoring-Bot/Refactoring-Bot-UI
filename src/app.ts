@@ -21,6 +21,7 @@ import {
   faEdit,
   faExclamationTriangle,
   faPlusCircle,
+  faSave,
   faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -29,6 +30,7 @@ library.add(
   faEdit,
   faExclamationTriangle,
   faPlusCircle,
+  faSave,
   faTrashAlt
 );
 Vue.component("fa-icon", FontAwesomeIcon);
