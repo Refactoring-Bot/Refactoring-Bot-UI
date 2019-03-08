@@ -15,7 +15,8 @@ A web frontend to conveniently configure and manage the [Refactoring-Bot](https:
 -   `src/config/index.ts`: configuration file with app or environment specific properties
 -   `test/`: directory for all tests
 
-## Build Setup
+## Developer Usage Instructions
+Per default, the UI expects the [Refactoring-Bot API](https://github.com/Refactoring-Bot/Refactoring-Bot) to run on <http://localhost:8808> (changeable in `src/config/index.ts` --> `apiEndpoint`).
 
 ```bash
 # install dependencies
@@ -36,6 +37,7 @@ npm test
 # run SonarQube analysis (configure sonar-project.properties first or pass parameters to choose the SonarQube instance)
 npm run sonar
 ```
+**Docker Support:** Please refer to our [Docker Repository](https://github.com/Refactoring-Bot/Docker) for detailed usage instructions with `docker` or `docker-compose`.
 
 ## Useful VSCode Extensions
 

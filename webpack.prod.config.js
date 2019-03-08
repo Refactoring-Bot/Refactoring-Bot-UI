@@ -16,5 +16,5 @@ module.exports = webpackMerge(commonConfig, {
         concatenateModules: true,
         minimize: true
     },
-    plugins: [new CleanWebpackPlugin(["target"])]
+    plugins: [new CleanWebpackPlugin()]
 });
