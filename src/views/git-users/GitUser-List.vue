@@ -19,10 +19,11 @@
     </b-form>
 
     <b-table show-empty striped hover :sort-by.sync="table.sortBy" :sort-desc.sync="table.sortDesc" :items="gitUserList" :fields="table.fields" :filter="table.filter">
-      <template slot="name" slot-scope="row">
-        <router-link v-bind:to="`/git-users/${row.item.gitUserId}`">{{row.item.name}}</router-link>
+      <template #cell(gitUserName)="row">
+        <router-link v-bind:to="`/git-users/${row.item.gitUserId}`">{{row.item.gitUserName}}</router-link>
       </template>
-      <template slot="actions" slot-scope="row">
+
+        <template #cell(actions)="row">
         <div class="float-right">
           <!-- Edit -->
           <b-button variant="primary" size="sm" class="mr-1" v-bind:to="`/git-users/${row.item.gitUserId}`">
@@ -48,13 +49,14 @@ import IGitUser from "./GitUser.interface";
 export default class extends Vue {
   private gitUserList: IGitUser[] = [];
   private table = {
-    sortBy: "name",
+    sortBy: "gitUserName",
     sortDesc: false,
     filter: "",
     fields: [
-      { key: "name", sortable: true },
-      { key: "email", sortable: true },
-      { key: "token", sortable: true },
+      { key: "gitUserId", sortable: true },
+      { key: "gitUserName", sortable: true },
+      { key: "gitUserEmail", sortable: true },
+      { key: "repoService", sortable: true, label: "Repository Service" },
       { key: "actions", label: "" }
     ]
   };

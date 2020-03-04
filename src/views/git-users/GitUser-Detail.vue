@@ -5,21 +5,29 @@
       <b-row>
         <b-col>
           <b-form-group label="User Name">
-            <b-form-input type="text" v-model="gitUser.name" required></b-form-input>
+            <b-form-input type="text" v-model="gitUser.gitUserName" required></b-form-input>
           </b-form-group>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
           <b-form-group label="Email">
-            <b-form-input type="email" v-model="gitUser.email" required></b-form-input>
+            <b-form-input type="email" v-model="gitUser.gitUserEmail" required></b-form-input>
           </b-form-group>
         </b-col>
       </b-row>
+    <b-row>
+        <b-col>
+            <b-form-group label="Repository Service">
+                <b-form-select v-model="gitUser.repoService" :options="repoServiceList" required></b-form-select>
+            </b-form-group>
+        </b-col>
+    </b-row>
       <b-row>
         <b-col>
           <b-form-group label="Token">
-            <b-form-input type="text" v-model="gitUser.token" required></b-form-input>
+            <b-form-input type="text" v-model="gitUser.gitUserToken" required></b-form-input>
+              <a href="https://github.com/settings/tokens" target="_blank">Generate a token with all access</a>
           </b-form-group>
         </b-col>
       </b-row>
@@ -51,6 +59,12 @@ export default class extends Vue {
   private gitUser = {} as IGitUser;
   private pageTitle = "";
   private editMode = false;
+  private repoServiceList = [
+      {
+          value: "github",
+          text: "GitHub"
+      }
+  ];
 
   public async mounted(): Promise<void> {
     // Add a new item or edit an existing one?
@@ -77,16 +91,17 @@ export default class extends Vue {
       ? GitUserRestClient.updateGitUser(this.gitUser)
       : GitUserRestClient.createGitUser(this.gitUser);
 
-    promise
+      promise
       .then(() => {
         alert("Git user successfully saved!");
         if (this.editMode) {
-          this.$router.push("/git-users");
+           this.$router.push("/git-users");
         }
       })
+
       .catch(res => {
         console.log(res);
-        alert(`Errors while saving git user: ${res.data}`);
+        alert(`Errors while saving git user: ${res.response.data}`);
       });
   }
 }
