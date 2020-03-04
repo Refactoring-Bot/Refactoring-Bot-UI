@@ -35,12 +35,13 @@
         <b-col>
           <b-form-group label="Analysis Project Key">
             <b-form-input type="text" v-model="configuration.analysisServiceProjectKey" required></b-form-input>
+              <a href="https://sonarcloud.io/dashboard?id=Bot-Playground%3ABot-Playground" target="_blank" v-if="configuration.analysisService === analysisServiceList[0].value">Example Analysis Project</a>
           </b-form-group>
         </b-col>
       </b-row>
       <b-row>
         <b-col cols="6">
-          <b-form-group label="Maximum # of Concurrent Pull Requests">
+          <b-form-group label="Maximum Amount of Concurrent Pull Requests">
             <b-form-input type="number" v-model="configuration.maxAmountRequests" required></b-form-input>
           </b-form-group>
         </b-col>
@@ -73,15 +74,10 @@ import IGitUser from "../git-users/GitUser.interface";
 @Component({})
 export default class extends Vue {
   private configuration = {} as IConfiguration;
+  private gitUser = {} as IGitUser;
   private pageTitle = "";
   private editMode = false;
   private gitUserList: IGitUser[] = [];
-  private repoServiceList = [
-    {
-      value: "github",
-      text: "GitHub"
-    }
-  ];
   private analysisServiceList = [
     {
       value: "sonarqube",
@@ -101,10 +97,12 @@ export default class extends Vue {
     if (this.editMode) {
       // Fetch existing configuration from API
       this.configuration = await ConfigRestClient.getConfigurationById(
-        this.$route.params.id
+          this.$route.params.id
       );
     }
   }
+
+
 
   public async remove(): Promise<void> {
     ConfigRestClient.deleteConfiguration(
@@ -116,20 +114,20 @@ export default class extends Vue {
 
   public async save(): Promise<void> {
     // Update existing item or create new item?
-    const promise = this.editMode
-      ? ConfigRestClient.updateConfiguration(this.configuration)
-      : ConfigRestClient.createConfiguration(this.configuration);
+      const promise = this.editMode
+          ? ConfigRestClient.updateConfiguration(this.configuration)
+          : ConfigRestClient.createConfiguration(this.configuration);
 
-    promise
-      .then(() => {
-        alert("Configuration successfully saved!");
-        if (this.editMode) {
-          this.$router.push("/configurations");
-        }
-      })
+      promise
+          .then(() => {
+              alert("Configuration successfully saved!");
+              if (this.editMode) {
+                  this.$router.push("/configurations");
+              }
+          })
       .catch(res => {
         console.log(res);
-        alert(`Errors while saving configuration: ${res.data}`);
+        alert(`Errors while saving configuration: ${res.response.data}`);
       });
   }
 }
