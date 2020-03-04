@@ -5,12 +5,7 @@
       <b-row>
         <b-col>
           <b-form-group label="Git User">
-            <b-form-select v-model="configuration.gitUserId" :options="gitUserList" value-field="gitUserId" text-field="name" required></b-form-select>
-          </b-form-group>
-        </b-col>
-        <b-col>
-          <b-form-group label="Repository Service">
-            <b-form-select v-model="configuration.repoService" :options="repoServiceList" required></b-form-select>
+            <b-form-select v-model="configuration.gitUserId" :options="gitUserList" value-field="gitUserId" text-field="gitUserName" required></b-form-select>
           </b-form-group>
         </b-col>
       </b-row>
