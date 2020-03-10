@@ -131,12 +131,13 @@
         }
 
         eventItemStatus(event) {
-            let state = "";
-            if (event.payload.pull_request.state === "closed") {
-                state = "event-item-state--closed";
-            }
-            if (event.payload.pull_request.state === "merged") {
-                state = "event-item-state--merged";
+            switch (event.payload.pull_request.state){
+                case "closed":{
+                    return "event-item-state--closed";
+                }
+                case "merged":{
+                    return "event-item-state--merged"
+                }
             }
         }
     }
