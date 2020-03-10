@@ -14,7 +14,7 @@
       </b-input-group>
       <b-button variant="success" to="/add-configuration">
         <fa-icon icon="plus-circle"></fa-icon>
-<!--        <span>Add Configuration</span>-->
+        <span>Add Configuration</span>
       </b-button>
     </b-form>
 

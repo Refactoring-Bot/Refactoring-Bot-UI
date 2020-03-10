@@ -27,7 +27,7 @@
         <b-col>
           <b-form-group label="Token">
             <b-form-input type="text" v-model="gitUser.gitUserToken" required></b-form-input>
-              <a href="https://github.com/settings/tokens" target="_blank">Generate a token with all access</a>
+              <a v-if="gitUser.repoService === repoServiceList[0].value" href="https://github.com/settings/tokens" target="_blank">Generate a token with all scopes</a>
           </b-form-group>
         </b-col>
       </b-row>
