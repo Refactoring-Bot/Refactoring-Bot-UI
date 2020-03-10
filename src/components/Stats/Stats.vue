@@ -1,37 +1,26 @@
 <template>
-    <div>Test {{amountOpenPullRequest}}</div>
+    <div>Open Pull Requests from Bot: {{amountOpenPullRequest}} / {{totalOpenPullRequest}} </div>
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
+    import {Component, Prop, Vue} from "vue-property-decorator";
     import IConfiguration from "../../views/configurations/Configuration.interface";
-    import ConfigRestClient from "../../views/configurations/ConfigurationRestClient";
-    import GitUserRestClient from "../../views/git-users/GitUserRestClient";
     import StatsRestClient from "./StatsRestClient";
 
     @Component({})
     export default class Stats extends Vue {
-        private configurationList: IConfiguration[] = [];
-        private amountOpenPullRequest;
+        @Prop() configuration: IConfiguration;
+        private amountOpenPullRequest = "";
+        private totalOpenPullRequest = "";
 
         public async mounted() {
-            this.init();
-            await this.getOpenPullRequests(48);
-        }
-
-        public async init() {
-            // Fetch items from API
-            Promise.all([
-                ConfigRestClient.getConfigurations(),
-                GitUserRestClient.getGitUsers(),
-            ]).then(res => {
-                this.configurationList = res[0];
-            });
+            await this.getOpenPullRequests(this.configuration.configurationId);
         }
 
         public async getOpenPullRequests(configId) {
             let stats = await StatsRestClient.getAmountOpenPullRequest(configId);
             this.amountOpenPullRequest = stats.amount;
+            this.totalOpenPullRequest = stats.total;
         }
 
     }
