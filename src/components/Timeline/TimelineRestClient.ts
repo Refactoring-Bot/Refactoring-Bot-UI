@@ -10,9 +10,5 @@ export default abstract class TimelineRestClient {
         return (await axios.get(`${this.api}/git-users/${gitUserId}/events`)).data;
     }
 
-    public static async refactorWithAnalysisService(configId: bigint): Promise<any> {
-        return (await axios.post(`${this.api}/configurations/${configId}/refactorWithAnalysisService`)).data;
-    }
-
     private static api = config.apiEndpoint;
 }
