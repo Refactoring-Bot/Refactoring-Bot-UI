@@ -6,9 +6,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootswatch/dist/flatly/bootstrap.min.css";
 
 // IE polyfills
-import "core-js/es6/array";
-import "core-js/es6/string";
-import "core-js/es7/array";
+import "core-js/es/array";
+import "core-js/es/string";
 
 // Main Vue library
 import Vue from "vue";

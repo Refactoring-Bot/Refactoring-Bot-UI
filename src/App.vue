@@ -12,6 +12,7 @@
 
         <b-collapse is-nav id="nav_collapse">
           <b-navbar-nav>
+            <b-nav-item to="/dashboard">Dashboard</b-nav-item>
             <b-nav-item to="/git-users">Git Users</b-nav-item>
             <b-nav-item to="/configurations">Configurations</b-nav-item>
           </b-navbar-nav>

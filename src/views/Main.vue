@@ -11,8 +11,9 @@
     <div>
       <b-card title="Usage Instructions">
         <p class="card-text">
-            First, create a <router-link to="/add-git-user">git user</router-link> that will be used by the bot.<br>
-            After that, create a <router-link to="/add-configuration">refactoring configuration</router-link> for a repository with the created user.
+            1) Create a <router-link to="/add-git-user">git user</router-link> that will be used by the bot.<br>
+            2) Create a refactoring <router-link to="/add-configuration">configuration</router-link> for a repository with the created user.<br>
+            You can start refactorings on <router-link to="/dashboard">Dashboard</router-link> and see the pull requests.
         </p>
       </b-card>
     </div>

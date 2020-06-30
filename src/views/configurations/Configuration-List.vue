@@ -19,20 +19,20 @@
     </b-form>
 
     <b-table show-empty striped hover :sort-by.sync="table.sortBy" :sort-desc.sync="table.sortDesc" :items="configurationList" :fields="table.fields" :filter="table.filter">
-      <template slot="repoName" slot-scope="row">
+      <template #cell(repoName)="row">
         <router-link v-bind:to="`/configurations/${row.item.configurationId}`">{{row.item.repoName}}</router-link>
       </template>
-      <template slot="repoService" slot-scope="row">
+      <template #cell(repoService)="row">
         <a target="_blank" v-bind:href="row.item.repoGitLink">{{row.item.repoService}}</a>
       </template>
-      <template slot="actions" slot-scope="row">
+      <template #cell(actions)="row">
         <div class="float-right">
           <!-- Edit -->
           <b-button variant="primary" size="sm" class="mr-1" v-bind:to="`/configurations/${row.item.configurationId}`">
             <fa-icon icon="edit"></fa-icon>
           </b-button>
           <!-- Delete -->
-          <b-button variant="primary" size="sm" class="mr-1" v-on:click="remove(row.item.configurationId)">
+          <b-button variant="danger" size="sm" class="mr-1" v-on:click="remove(row.item.configurationId)">
             <fa-icon icon="trash-alt"></fa-icon>
           </b-button>
         </div>
@@ -53,11 +53,11 @@ import GitUserRestClient from "../git-users/GitUserRestClient";
 export default class extends Vue {
   private configurationList: IConfiguration[] = [];
   private table = {
-    sortBy: "gitUserName",
+    sortBy: "botName",
     sortDesc: false,
     filter: "",
     fields: [
-      { key: "gitUserName", sortable: true, label: "Git User" },
+      { key: "botName", sortable: true, label: "Git User" },
       { key: "repoOwner", sortable: true, label: "Repository Owner" },
       { key: "repoName", sortable: true, label: "Repository Name" },
       { key: "repoService", sortable: true, label: "Repository Service" },
@@ -65,7 +65,7 @@ export default class extends Vue {
       {
         key: "analysisServiceProjectKey",
         sortable: true,
-        lable: "Analysis Project Key"
+        label: "Analysis Project Key"
       },
       { key: "actions", label: "" }
     ]
@@ -82,9 +82,9 @@ export default class extends Vue {
       GitUserRestClient.getGitUsers()
     ]).then(res => {
       res[0].forEach(conf => {
-        conf.gitUserName = res[1].find(
-          user => user.gitUserId === conf.gitUserId
-        ).name;
+        conf.botName = res[0].find(
+            user => user.gitUserId === conf.gitUserId
+        ).botName;
       });
       this.configurationList = res[0];
     });
@@ -92,9 +92,12 @@ export default class extends Vue {
 
   // Delete a single item
   private remove(id: number) {
-    ConfigRestClient.deleteConfiguration(id).then(async () => {
-      this.init();
-    });
+    let ask = window.confirm("Are you sure you want to delete this configuration (ID: "+ id +")?")
+    if (ask) {
+      ConfigRestClient.deleteConfiguration(id).then(async () => {
+          this.init();
+      });
+    }
   }
 }
 </script>

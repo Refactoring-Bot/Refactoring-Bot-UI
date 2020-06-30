@@ -8,3 +8,12 @@ Vue.filter("customDateFilter", (timestamp: number) => {
         return moment(timestamp).format("YYYY-MM-DD HH:mm:ss");
     }
 });
+
+Vue.filter("timeFromNow", (timestamp: number) => {
+    if (timestamp === 0) {
+        return "--";
+    } else {
+        return moment(timestamp).fromNow();
+    }
+});
+

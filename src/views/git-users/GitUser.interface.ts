@@ -1,6 +1,7 @@
 export default interface IGitUser {
   gitUserId?: number;
-  email: string;
-  name: string;
-  token: string;
+  gitUserEmail: string;
+  gitUserName: string;
+  gitUserToken: string;
+  repoService: string;
 }
