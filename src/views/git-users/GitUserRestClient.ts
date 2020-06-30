@@ -6,7 +6,7 @@ import IGitUser from "./GitUser.interface";
 export default abstract class GitUserRestClient {
   // Get all git users
   public static async getGitUsers(): Promise<IGitUser[]> {
-    return (await axios.get(`${this.api}/git-users/`)).data;
+    return (await axios.get(`${this.api}/git-users`)).data;
   }
 
   // Get git user by ID

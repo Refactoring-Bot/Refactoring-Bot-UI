@@ -10,5 +10,12 @@ export default abstract class TimelineRestClient {
         return (await axios.get(`${this.api}/git-users/${gitUserId}/events`)).data;
     }
 
+    // Get events by configID
+    public static async getConfigEvents(
+        configId: bigint
+    ): Promise<any> {
+        return (await axios.get(`${this.api}/configurations/${configId}/events`)).data;
+    }
+
     private static api = config.apiEndpoint;
 }

@@ -32,7 +32,7 @@
             <fa-icon icon="edit"></fa-icon>
           </b-button>
           <!-- Delete -->
-          <b-button variant="primary" size="sm" class="mr-1" v-on:click="remove(row.item.configurationId)">
+          <b-button variant="danger" size="sm" class="mr-1" v-on:click="remove(row.item.configurationId)">
             <fa-icon icon="trash-alt"></fa-icon>
           </b-button>
         </div>
@@ -82,9 +82,9 @@ export default class extends Vue {
       GitUserRestClient.getGitUsers()
     ]).then(res => {
       res[0].forEach(conf => {
-        conf.botName = res[1].find(
+        conf.botName = res[0].find(
             user => user.gitUserId === conf.gitUserId
-        ).gitUserName;
+        ).botName;
       });
       this.configurationList = res[0];
     });
@@ -92,9 +92,12 @@ export default class extends Vue {
 
   // Delete a single item
   private remove(id: number) {
-    ConfigRestClient.deleteConfiguration(id).then(async () => {
-      this.init();
-    });
+    let ask = window.confirm("Are you sure you want to delete this configuration (ID: "+ id +")?")
+    if (ask) {
+      ConfigRestClient.deleteConfiguration(id).then(async () => {
+          this.init();
+      });
+    }
   }
 }
 </script>

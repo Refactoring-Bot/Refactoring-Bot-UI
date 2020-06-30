@@ -4,7 +4,7 @@
         <template>
             <div id="dashboard">
                 <b-tabs :lazy="true">
-                    <b-tab :title="config.repoOwner + '/' + config.repoName" v-for="config in configurationList"
+                    <b-tab :title="config.botName + '/' + config.repoName" v-for="config in configurationList"
                            :key="'tab-'+ config.configurationId">
                         <b-container class="tab-content" fluid>
                             <b-row>
@@ -12,11 +12,13 @@
                                     <Timeline ref="timelineChild" :configuration="config"></Timeline>
                                 </b-col>
                                 <b-col>
+                                    <b-card>
                                     <Stats ref="statsChild" :configuration="config">Test</Stats>
-                                    <b-button variant="secondary" style="display:inline-block;"
+                                    <b-button variant="warning" style="display:inline-block;"
                                               @click.prevent="startRefactoring(config.configurationId)">
                                         Start Refactoring
                                     </b-button>
+                                    </b-card>
                                 </b-col>
                             </b-row>
                         </b-container>
@@ -47,9 +49,10 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
+    import {Vue, Component, Ref} from "vue-property-decorator";
     import Stats from "../../components/Stats/Stats.vue";
     import Timeline from "../../components/Timeline/Timeline.vue";
+    import TimelineRestClient from "../../components/Timeline/TimelineRestClient";
     import IConfiguration from "../../views/configurations/Configuration.interface";
     import ConfigRestClient from "../../views/configurations/ConfigurationRestClient";
     import GitUserRestClient from "../../views/git-users/GitUserRestClient";
@@ -85,8 +88,14 @@
         }
 
         public async startRefactoring(configId): Promise<void> {
-            alert("Refactoring with Analysis Service started");
-            await DashboardRestClient.refactorWithAnalysisService(configId);
+            this.$bvToast.toast('Refactoring started', {
+                        variant: 'success',
+                        toaster: 'b-toaster-top-center',
+                        autoHideDelay: 1800
+            })
+            await DashboardRestClient.refactorWithAnalysisService(configId).then(() => {
+                this.$refs.timelineChild[0].fetchEvents(configId);
+            });
         }
     };
 </script>

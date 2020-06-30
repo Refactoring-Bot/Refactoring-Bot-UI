@@ -5,11 +5,12 @@
             <div class="update-header">
                 <p>Last updated: {{lastUpdate | customDateFilter}}</p>
                 <b-button variant="primary" style="float:right;"
-                          @click.prevent="fetchEvents(configuration.gitUserId)">
+                          @click.prevent="fetchEvents(configuration.configurationId)">
                     Update Events
                 </b-button>
             </div>
             <b-list-group-item class="" v-for="event in events" :key="'event-' + event.id">
+                <!--  Pull Request Events  -->
                 <div v-if="event.type === eventTypes[0]">
                     <div>
                         <div class="event-item-header">
@@ -26,27 +27,27 @@
                             <div class="event-item-time">
                                 <div v-if="event.payload.pull_request.merged_at !== null">
                                     merged
-                                    <time :datetime="event.payload.pull_request.merged_at">
+                                    <time v-b-tooltip :title="event.payload.pull_request.merged_at | customDateFilter"  :datetime="event.payload.pull_request.merged_at">
                                         {{event.payload.pull_request.merged_at | timeFromNow}}
                                     </time>
                                 </div>
                                 <div v-else-if="event.payload.pull_request.closed_at !== null">
                                     closed
-                                    <time :datetime="event.payload.pull_request.closed_at">
+                                    <time v-b-tooltip :title="event.payload.pull_request.closed_at | customDateFilter" :datetime="event.payload.pull_request.closed_at">
                                         {{event.payload.pull_request.closed_at | timeFromNow}}
                                     </time>
                                 </div>
                                 <div v-else-if="event.payload.pull_request.updated_at !== null">
                                     updated
-                                    <time
-                                        :datetime="event.payload.pull_request.updated_at">
+                                    <time v-b-tooltip :title="event.payload.pull_request.updated_at | customDateFilter"
+                                          :datetime="event.payload.pull_request.updated_at">
                                         {{event.payload.pull_request.updated_at | timeFromNow}}
                                     </time>
                                 </div>
                                 <div v-else-if="event.payload.pull_request.created_at !== null">
                                     created
-                                    <time
-                                        :datetime="event.payload.pull_request.created_at">
+                                    <time v-b-tooltip :title="event.payload.pull_request.created_at| customDateFilter"
+                                          :datetime="event.payload.pull_request.created_at">
                                         {{event.payload.pull_request.created_at | timeFromNow}}
                                     </time>
                                 </div>
@@ -58,23 +59,24 @@
                         </div>
                     </div>
                 </div>
+                <!--  Issue Comment Events  -->
                 <div v-else-if="event.type === eventTypes[1]">
                     <div>
-                        <div class="event-item-actor"><a :href="event.payload.issue.user.html_url"
+                        <div class="event-item-actor"><a :href="event.payload.comment.user.html_url"
                                                          target="_blank"> {{event.actor.login}}</a>
                         </div>
                         <div class="event-item-time">
                             <div v-if="event.payload.comment.created_at !== null">
                                 commented
 
-                                <time :datetime="event.payload.comment.created_at">
+                                <time v-b-tooltip :title="event.payload.comment.created_at | customDateFilter" :datetime="event.payload.comment.created_at">
                                     {{event.payload.comment.created_at | timeFromNow}}
                                 </time>
                             </div>
                         </div>
                         <blockquote class="event-item-comment"><p>{{event.payload.comment.body}}</p>
                         </blockquote>
-                        <div>in <a :href="event.payload.comment.html_url"
+                        <div>in <a :href="event.payload.issue.html_url"
                                    target="_blank">{{event.payload.issue.title}}</a>
                         </div>
                     </div>
@@ -113,29 +115,38 @@
 
         public async init() {
             // Fetch items from API
-            await this.fetchEvents(this.configuration.gitUserId);
+            await this.fetchEvents(this.configuration.configurationId);
         }
 
         eventFilter(events) {
-            if (this.eventTypes.includes(events.type)) {
-                if ((events.actor.login === this.configuration.botName) && (events.repo.name === this.configuration.repoOwner + "/" + this.configuration.repoName)) {
-                    return (events.type);
-                }
+            if ((this.eventTypes[0] === events.type) && (events.actor.login === this.configuration.botName)) {
+                return (events.type);
+            }
+            if ((this.eventTypes[1]) === events.type && ((events.actor.login === this.configuration.botName) || (events.payload.issue.user.login === this.configuration.botName))){
+                return (events.type);
             }
         }
 
-        public async fetchEvents(gitUserId) {
-            this.events = await TimelineRestClient.getUserEvents(gitUserId);
+        public async fetchEvents(configId) {
+            this.events = await TimelineRestClient.getConfigEvents(configId);
             this.events = this.events.filter(this.eventFilter);
             this.lastUpdate = new Date().toISOString();
+            this.$bvToast.toast('Events are updated', {
+                variant: 'primary',
+                toaster: 'b-toaster-top-center',
+                autoHideDelay: 1800
+            })
         }
 
         eventItemStatus(event) {
             switch (event.payload.pull_request.state){
-                case "closed":{
+                case "closed": {
                     return "event-item-state--closed";
                 }
-                case "merged":{
+                case "open": {
+                    return "event-item-state--open";
+                }
+                case "merged": {
                     return "event-item-state--merged"
                 }
             }
@@ -144,7 +155,6 @@
 </script>
 
 <style lang="less" scoped>
-
 
     .tab-content {
         padding-top: 15px;
@@ -166,6 +176,10 @@
                 color: red;
             }
 
+            &--open {
+                color: dodgerblue;
+            }
+
             &--merged {
                 color: green;
             }
@@ -178,8 +192,8 @@
         &-comment {
             background: #f9f9f9;
             border-left: 10px solid #ccc;
-            padding: 0.5em 10px;
-            font-size: 16pt;
+            padding: 5px;
+            font-size: 12pt;
         }
     }
 </style>

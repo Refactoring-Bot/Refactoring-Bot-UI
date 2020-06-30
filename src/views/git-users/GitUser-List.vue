@@ -30,7 +30,7 @@
             <fa-icon icon="edit"></fa-icon>
           </b-button>
           <!-- Delete -->
-          <b-button variant="primary" size="sm" class="mr-1" v-on:click="remove(row.item.gitUserId)">
+          <b-button variant="danger" size="sm" class="mr-1" v-on:click="remove(row.item.gitUserId)">
             <fa-icon icon="trash-alt"></fa-icon>
           </b-button>
         </div>
@@ -68,9 +68,12 @@ export default class extends Vue {
 
   // Delete a single item
   private remove(id: number) {
-    GitUserRestClient.deleteGitUser(id).then(async () => {
-      this.gitUserList = await GitUserRestClient.getGitUsers();
-    });
+    let ask = confirm("Are you sure you want to delete this user (ID: " + id + ")?");
+    if (ask) {
+      GitUserRestClient.deleteGitUser(id).then(async () => {
+        this.gitUserList = await GitUserRestClient.getGitUsers();
+      });
+    }
   }
 }
 </script>

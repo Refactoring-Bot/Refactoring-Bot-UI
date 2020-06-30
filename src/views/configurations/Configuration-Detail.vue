@@ -36,7 +36,7 @@
       </b-row>
       <b-row>
         <b-col cols="6">
-          <b-form-group label="Maximum Amount of Concurrent Pull Requests">
+          <b-form-group label="Maximum Amount of Concurrent Pull Requests" description="How many pull requests can be opened at the same time?">
             <b-form-input type="number" v-model="configuration.maxAmountRequests" required></b-form-input>
           </b-form-group>
         </b-col>
@@ -46,11 +46,11 @@
           <fa-icon icon="save"></fa-icon>
           <span>Save</span>
         </b-button>
-        <b-button variant="primary" v-on:click="remove()" v-if="editMode">
+        <b-button variant="danger" v-on:click="remove()" v-if="editMode">
           <fa-icon icon="trash-alt"></fa-icon>
           <span>Delete</span>
         </b-button>
-        <b-button variant="primary" to="/configurations">
+        <b-button variant="secondary" to="/configurations">
           <span>Back</span>
         </b-button>
       </b-form>
@@ -59,26 +59,30 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import ConfigRestClient from "./ConfigurationRestClient";
-import IConfiguration from "./Configuration.interface";
-import GitUserRestClient from "../git-users/GitUserRestClient";
-import IGitUser from "../git-users/GitUser.interface";
+    import Vue from "vue";
+    import Component from "vue-class-component";
+    import IGitUser from "../git-users/GitUser.interface";
+    import GitUserRestClient from "../git-users/GitUserRestClient";
+    import IConfiguration from "./Configuration.interface";
+    import ConfigRestClient from "./ConfigurationRestClient";
 
-@Component({})
+    @Component({})
 export default class extends Vue {
-  private configuration = {} as IConfiguration;
+  private analysisServiceList = [
+      {
+            value: "sonarqube",
+            text: "SonarQube"
+      }
+  ];
   private gitUser = {} as IGitUser;
   private pageTitle = "";
   private editMode = false;
   private gitUserList: IGitUser[] = [];
-  private analysisServiceList = [
-    {
-      value: "sonarqube",
-      text: "SonarQube"
-    }
-  ];
+  private configuration = {
+        analysisService : this.analysisServiceList[0].value,
+        analysisServiceProjectKey : "Bot-Playground:Bot-Playground",
+        maxAmountRequests : 5
+  } as IConfiguration;
 
   public async mounted(): Promise<void> {
     // Fetch git users from API
@@ -100,11 +104,14 @@ export default class extends Vue {
 
 
   public async remove(): Promise<void> {
-    ConfigRestClient.deleteConfiguration(
-      this.configuration.configurationId
-    ).then(() => {
-      this.$router.push("/configurations");
-    });
+    let ask = window.confirm("Are you sure you want to delete this configuration?")
+    if (ask) {
+      ConfigRestClient.deleteConfiguration(
+        this.configuration.configurationId
+      ).then(() => {
+        this.$router.push("/configurations");
+      });
+    }
   }
 
   public async save(): Promise<void> {
@@ -115,7 +122,11 @@ export default class extends Vue {
 
       promise
           .then(() => {
-              alert("Configuration successfully saved!");
+              this.$bvToast.toast('Configuration successfully saved!', {
+                  variant: 'primary',
+                  toaster: 'b-toaster-top-center',
+                  autoHideDelay: 1800
+              })
               if (this.editMode) {
                   this.$router.push("/configurations");
               }

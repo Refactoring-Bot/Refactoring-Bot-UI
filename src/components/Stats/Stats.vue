@@ -1,5 +1,5 @@
 <template>
-    <div>Open Pull Requests from Bot: {{amountOpenPullRequest}} / {{totalOpenPullRequest}} </div>
+    <div>Open Pull Requests from Bot/Total: <span class="font-weight-bold">{{amountOpenPullRequest}} / {{totalOpenPullRequest}}</span></div>
 </template>
 
 <script lang="ts">

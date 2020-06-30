@@ -25,9 +25,12 @@
     </b-row>
       <b-row>
         <b-col>
-          <b-form-group label="Token">
+          <b-form-group label="Token" description="Please login and generate a token with all scopes ">
             <b-form-input type="text" v-model="gitUser.gitUserToken" required></b-form-input>
-              <a v-if="gitUser.repoService === repoServiceList[0].value" href="https://github.com/settings/tokens" target="_blank">Generate a token with all scopes</a>
+            <div v-if="gitUser.repoService === repoServiceList[0].value">
+              <strong>Note:</strong><br>
+              Create a token <a href="https://github.com/settings/tokens" target="_blank">here</a>
+            </div>
           </b-form-group>
         </b-col>
       </b-row>
@@ -36,12 +39,15 @@
           <fa-icon icon="save"></fa-icon>
           <span>Save</span>
         </b-button>
-        <b-button variant="primary" v-on:click="remove()" v-if="editMode">
+        <b-button variant="danger" v-on:click="remove()" v-if="editMode">
           <fa-icon icon="trash-alt"></fa-icon>
           <span>Delete</span>
         </b-button>
-        <b-button variant="primary" to="/git-users">
+        <b-button variant="secondary" to="/git-users">
           <span>Back</span>
+        </b-button>
+        <b-button variant="primary" to="/add-configuration">
+          <span>Add a configuration</span>
         </b-button>
       </b-form>
     </b-container>
@@ -56,15 +62,17 @@ import GitUserRestClient from "../git-users/GitUserRestClient";
 
 @Component({})
 export default class extends Vue {
-  private gitUser = {} as IGitUser;
+   private repoServiceList = [
+        {
+            value: "github",
+            text: "GitHub"
+        }
+   ];
+  private gitUser = {
+      repoService: this.repoServiceList[0].value
+  } as IGitUser;
   private pageTitle = "";
   private editMode = false;
-  private repoServiceList = [
-      {
-          value: "github",
-          text: "GitHub"
-      }
-  ];
 
   public async mounted(): Promise<void> {
     // Add a new item or edit an existing one?
@@ -80,9 +88,12 @@ export default class extends Vue {
   }
 
   public async remove(): Promise<void> {
-    GitUserRestClient.deleteGitUser(this.gitUser.gitUserId).then(() => {
-      this.$router.push("/git-users");
-    });
+    let ask = window.confirm("Are you sure you want to delete this configuration?")
+    if (ask) {
+      GitUserRestClient.deleteGitUser(this.gitUser.gitUserId).then(() => {
+          this.$router.push("/git-users");
+      });
+    }
   }
 
   public async save(): Promise<void> {
@@ -93,7 +104,11 @@ export default class extends Vue {
 
       promise
       .then(() => {
-        alert("Git user successfully saved!");
+          this.$bvToast.toast('Git user successfully saved!', {
+              variant: 'primary',
+              toaster: 'b-toaster-top-center',
+              autoHideDelay: 1800
+          })
         if (this.editMode) {
            this.$router.push("/git-users");
         }
